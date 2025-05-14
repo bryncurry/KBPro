@@ -1,0 +1,17 @@
+# Android Studio
+.gradle/
+.idea/
+local.properties
+.DS_Store
+
+# Build output
+/build/
+/*/build/
+
+# Kotlin/Java
+*.class
+
+# Misc
+*.log
+*.keystore
+*.jks
