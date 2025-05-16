@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.kbwatch"
+    namespace = "com.example.kbpro"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.kbwatch"
+        applicationId = "com.example.kbpro"
         minSdk = 30
         targetSdk = 34
         versionCode = 1
