@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.kbpro"
+    namespace = "com.example.kbwatch"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.kbpro"
+        applicationId = "com.example.kbwatch"
         minSdk = 30
         targetSdk = 34
         versionCode = 1
@@ -49,8 +49,8 @@ android {
 }
 
 dependencies {
-
-    implementation(libs.play.services.wearable)
+    implementation("com.google.android.gms:play-services-wearable:18.1.0")
+    implementation("androidx.wear:wear:1.3.0")
     implementation(platform(libs.compose.bom))
     implementation(libs.ui)
     implementation(libs.ui.tooling.preview)

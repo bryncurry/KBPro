@@ -17,11 +17,10 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url = uri("https://jitpack.io") }
     }
-
 }
 
 rootProject.name = "KBPro"
-include(":app")
 include(":KBPhone")
 include(":KBWatch")

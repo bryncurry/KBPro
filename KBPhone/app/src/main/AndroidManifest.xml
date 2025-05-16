@@ -5,6 +5,12 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="com.google.android.wearable.permission.BIND_LISTENER" />
+
+    <!-- Declare that the app has Wear OS companion app -->
+    <queries>
+        <package android:name="com.example.kbwatch" />
+    </queries>
 
     <application
         android:allowBackup="true"
@@ -16,6 +22,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KBPro"
         tools:targetApi="31">
+
+        <!-- Capabilities -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -28,11 +40,17 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".ConfigListenerService"
+        <service 
+            android:name=".ConfigListenerService"
+            android:enabled="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.DATA_CHANGED" />
-                <data android:scheme="wear" android:host="*" android:pathPrefix="/exercise_config" />
+                <data android:scheme="wear" android:host="*" android:pathPrefix="/workout_config" />
+            </intent-filter>
+            <!-- Add capability filter -->
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
             </intent-filter>
         </service>
     </application>
