@@ -1,6 +1,5 @@
 package com.example.kbpro
 
-import android.util.Log
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -10,7 +9,7 @@ data class WorkoutConfig(
     val reps: Int = 0
 )
 
-object WorkoutRepository {
+object CurrentWorkoutModel {
     private val _config = MutableStateFlow(WorkoutConfig())
     val config: StateFlow<WorkoutConfig> = _config.asStateFlow()
 

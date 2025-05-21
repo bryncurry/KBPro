@@ -5,7 +5,6 @@
 package com.example.kbpro.presentation
 
 import android.content.Context
-import android.content.Intent
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -51,9 +50,8 @@ import org.tensorflow.lite.Interpreter
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import kotlin.math.abs
-import com.example.kbpro.WorkoutVM
-import com.example.kbpro.WorkoutRepository
-import com.example.kbpro.SetsCompleteVM
+import com.example.kbpro.HomeScreenVM
+import com.example.kbpro.CurrentWorkoutModel
 
 class MainActivity : ComponentActivity() {
     private lateinit var sensorManager: SensorManager
@@ -64,7 +62,8 @@ class MainActivity : ComponentActivity() {
     private val slidingWindow = ArrayList<FloatArray>()
     private var lastRepTime = 0L
 
-    private val viewModel: WorkoutVM by viewModels()
+    private val viewModel: HomeScreenVM by viewModels()
+
     private var sets: Int = 0
     private var reps: Int = 0
     private var repCount = 0
@@ -102,7 +101,7 @@ class MainActivity : ComponentActivity() {
             val config by viewModel.workoutConfig.collectAsState()
             sets = config.sets
             reps = config.reps
-            MainContent()
+            MainContent(viewModel)
         }
     }
 
@@ -225,10 +224,11 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun MainContent() {
+    fun MainContent(
+        viewModel: HomeScreenVM
+    ) {
         // The VM, which is listening for events from the phone that might change some of our
         // composables.
-        val viewModel: WorkoutVM = viewModel()
         val workoutConfig by viewModel.workoutConfig.collectAsState()
 
         val showRepsScreen = remember { mutableStateOf(false) }
@@ -236,11 +236,11 @@ class MainActivity : ComponentActivity() {
 
         when {
             showSetsScreen.value -> SetsSelectorScreen { newSets ->
-                WorkoutRepository.updateConfig(newSets, workoutConfig.reps)
+                CurrentWorkoutModel.updateConfig(newSets, workoutConfig.reps)
                 showSetsScreen.value = false
             }
             showRepsScreen.value -> RepsSelectorScreen { newReps ->
-                WorkoutRepository.updateConfig(workoutConfig.sets, newReps)
+                CurrentWorkoutModel.updateConfig(workoutConfig.sets, newReps)
                 showRepsScreen.value = false
             }
             timerScreenActive -> TimerScreen()
@@ -249,7 +249,8 @@ class MainActivity : ComponentActivity() {
                 showRepsScreen,
                 showSetsScreen,
                 sets = workoutConfig.sets,
-                reps = workoutConfig.reps
+                reps = workoutConfig.reps,
+                viewModel
             )
         }
     }
@@ -278,7 +279,7 @@ class MainActivity : ComponentActivity() {
         showSetsScreen: MutableState<Boolean>,
         sets: Int,
         reps: Int,
-        viewModel: SetsCompleteVM = viewModel()
+        viewModel: HomeScreenVM = viewModel()
     ) {
         val setsCompleted by viewModel.setsCompleted
 
