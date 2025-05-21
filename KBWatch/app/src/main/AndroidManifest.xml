@@ -27,7 +27,7 @@
             android:value="@integer/google_play_services_version" />
 
         <service
-            android:name=".complication.MainComplicationService"
+            android:name="com.example.kbpro.complication.MainComplicationService"
             android:exported="true"
             android:label="@string/complication_label"
             android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER">
@@ -44,7 +44,7 @@
         </service>
 
         <service
-            android:name=".tile.MainTileService"
+            android:name="com.example.kbpro.tile.MainTileService"
             android:exported="true"
             android:label="@string/tile_label"
             android:permission="com.google.android.wearable.permission.BIND_TILE_PROVIDER">
@@ -58,7 +58,7 @@
         </service>
 
         <service
-            android:name=".presentation.WorkoutListenerService"
+            android:name="com.example.kbpro.presentation.WorkoutListenerService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

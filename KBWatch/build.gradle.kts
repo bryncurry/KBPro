@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.kbwatch"
+    namespace = "com.example.kbpro"
     compileSdk = 34
 
     defaultConfig {

@@ -9,7 +9,7 @@
 
     <!-- Declare that the app has Wear OS companion app -->
     <queries>
-        <package android:name="com.example.kbwatch" />
+        <package android:name="com.example.kbpro" />
     </queries>
 
     <application

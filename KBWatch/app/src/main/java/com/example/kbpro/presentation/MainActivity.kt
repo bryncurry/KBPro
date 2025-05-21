@@ -25,9 +25,11 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.keyframes
 import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -37,6 +39,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -49,6 +53,7 @@ import java.nio.ByteOrder
 import kotlin.math.abs
 import com.example.kbpro.WorkoutVM
 import com.example.kbpro.WorkoutRepository
+import com.example.kbpro.SetsCompleteVM
 
 class MainActivity : ComponentActivity() {
     private lateinit var sensorManager: SensorManager
@@ -97,7 +102,7 @@ class MainActivity : ComponentActivity() {
             val config by viewModel.workoutConfig.collectAsState()
             sets = config.sets
             reps = config.reps
-            MainContent() 
+            MainContent()
         }
     }
 
@@ -272,8 +277,11 @@ class MainActivity : ComponentActivity() {
         showRepsScreen: MutableState<Boolean>,
         showSetsScreen: MutableState<Boolean>,
         sets: Int,
-        reps: Int
+        reps: Int,
+        viewModel: SetsCompleteVM = viewModel()
     ) {
+        val setsCompleted by viewModel.setsCompleted
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -281,24 +289,25 @@ class MainActivity : ComponentActivity() {
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Button(onClick = { showSetsScreen.value = true }) {
-                    Text(
-                        text = if (sets == 0) "Sets" else sets.toString(),
-                        fontSize = 18.sp
-                    )
-                }
-                Text("×", fontSize = 18.sp)
-                Button(onClick = { showRepsScreen.value = true }) {
-                    Text(
-                        text = if (reps == 0) "Reps" else reps.toString(),
-                        fontSize = 18.sp
-                    )
-                }
-            }
+            SetsProgressIndicator(currSetsComplete = setsCompleted, totalSets = sets)
+//            Row(
+//                horizontalArrangement = Arrangement.spacedBy(8.dp),
+//                verticalAlignment = Alignment.CenterVertically
+//            ) {
+//                Button(onClick = { showSetsScreen.value = true }) {
+//                    Text(
+//                        text = if (sets == 0) "Sets" else sets.toString(),
+//                        fontSize = 18.sp
+//                    )
+//                }
+//                Text("×", fontSize = 18.sp)
+//                Button(onClick = { showRepsScreen.value = true }) {
+//                    Text(
+//                        text = if (reps == 0) "Reps" else reps.toString(),
+//                        fontSize = 18.sp
+//                    )
+//                }
+//            }
             Button(
                 onClick = { 
                     startExercise()
@@ -352,6 +361,26 @@ fun RepsSelectorScreen(onRepsSelected: (Int) -> Unit) {
                 Text(text = num.toString())
             }
         }
+    }
+}
+
+@Composable
+fun SetsProgressIndicator(currSetsComplete: Int, totalSets: Int){
+    val currPercentage = currSetsComplete.toFloat() / totalSets.toFloat()
+    val animatedProgress = animateFloatAsState(currPercentage).value
+    Box(
+        contentAlignment = Alignment.Center,
+    ){
+        Canvas(modifier = Modifier.size(100.dp)) {
+            drawArc(
+                color = Color.Green,
+                startAngle = -90f,
+                sweepAngle = 360 * animatedProgress,
+                useCenter = false,
+                style = Stroke(width = 12f)
+            )
+        }
+        Text("$currSetsComplete/$totalSets")
     }
 }
 
